@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>World Recipes - 100 Diverse Recipes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  :root {
+    --color-bg-light: #fef9f8;
+    --color-bg-dark: #f0f0f3;
+    --color-text-light: #4a4a4a;
+    --color-text-dark: #596275;
+    --color-primary: #ffb5a7;
+    --color-primary-dark: #f29e8e;
+    --color-accent: #ffd6d6;
+    --color-accent-dark: #facdcd;
+    --color-border-light: #fedcd2;
+    --color-border-dark: #f7c5bb;
+    --transition-speed: 0.3s;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--color-bg-light);
+    color: var(--color-text-light);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+  }
+  body.dark {
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-dark);
+  }
+  header {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 1.5rem 2rem;
+    font-weight: 700;
+    font-size: 2rem;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 6px 20px rgba(255, 181, 167, 0.35);
+  }
+  body.dark header {
+    background-color: var(--color-primary-dark);
+    color: #fff5f0;
+    box-shadow: 0 6px 20px rgba(242, 158, 142, 0.35);
+  }
+  .theme-toggle {
+    cursor: pointer;
+    background: none;
+    border: 2px solid white;
+    border-radius: 24px;
+    padding: 0.3rem 1rem;
+    font-weight: 600;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  .theme-toggle:hover {
+    background-color: rgba(255 255 255 / 0.2);
+  }
+  main {
+    flex: 1;
+    max-width: 1100px;
+    padding: 2rem 1rem 3rem;
+    margin: 0 auto;
+  }
+  .search-container {
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .search-container input, .search-container select {
+    padding: 0.75rem 1.2rem;
+    font-size: 1.1rem;
+    border-radius: 40px;
+    border: 2px solid var(--color-border-light);
+    flex: 1 1 280px;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s ease;
+    background: white;
+    color: var(--color-text-light);
+    box-shadow: 2px 2px 6px rgb(255 181 167 / 0.3);
+  }
+  body.dark .search-container input, body.dark .search-container select {
+    background: #fff2f0;
+    border-color: var(--color-border-dark);
+    color: var(--color-text-dark);
+    box-shadow: 2px 2px 6px rgba(242, 158, 142, 0.4);
+  }
+  .search-container input:focus, .search-container select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-accent);
+  }
+  body.dark .search-container input:focus, body.dark .search-container select:focus {
+    border-color: var(--color-primary-dark);
+    box-shadow: 0 0 0 3px var(--color-accent-dark);
+    background: #ffe8e3;
+  }
+  .ads-container {
+    margin-bottom: 2rem;
+    border: 2px dashed var(--color-border-light);
+    border-radius: 12px;
+    padding: 1rem;
+    font-size: 1rem;
+    color: var(--color-primary);
+    text-align: center;
+    user-select: none;
+    background: var(--color-accent);
+    box-shadow: 0 6px 15px rgba(255 181 167 / 0.3);
+  }
+  body.dark .ads-container {
+    background: var(--color-accent-dark);
+    border-color: var(--color-border-dark);
+    color: var(--color-primary-dark);
+    box-shadow: 0 6px 15px rgba(242 158 142 / 0.3);
+  }
+  .recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(320px,1fr));
+    gap: 1.5rem;
+  }
+  .recipe-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(255, 181, 167, 0.25);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    padding: 1rem 1.5rem 2rem;
+  }
+  body.dark .recipe-card {
+    background: #fff0f0;
+    box-shadow: 0 8px 25px rgba(242, 158, 142, 0.35);
+  }
+  .recipe-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 14px 40px rgba(255, 181, 167, 0.45);
+  }
+  .recipe-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .recipe-title {
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin: 0 0 0.5rem;
+    color: var(--color-primary);
+  }
+  body.dark .recipe-title {
+    color: var(--color-primary-dark);
+  }
+  .recipe-country {
+    font-size: 0.95rem;
+    color: #b65a41;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    font-style: italic;
+  }
+  .recipe-desc {
+    font-size: 1rem;
+    flex-grow: 1;
+    color: #6a3a2e;
+  }
+  body.dark .recipe-desc {
+    color: #a2503a;
+  }
+  .pagination {
+    margin-top: 2.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+  .pagination button {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+  .pagination button:hover:not(:disabled) {
+    background: var(--color-primary-dark);
+  }
+  body.dark .pagination button {
+    background: var(--color-primary-dark);
+    color: white;
+  }
+  body.dark .pagination button:hover:not(:disabled) {
+    background: var(--color-primary);
+    color: white;
+  }
+  .pagination button:disabled {
+    background: #f7b7aa;
+    cursor: not-allowed;
+  }
+  /* Modal styles */
+  .modal-bg {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 181, 167, 0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1200;
+    padding: 1rem;
+  }
+  .modal-bg.active {
+    display: flex;
+  }
+  .modal {
+    background: white;
+    max-width: 720px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(255, 181, 167, 0.55);
+    padding: 2rem 3rem;
+    position: relative;
+  }
+  body.dark .modal {
+    background: #ffe8e6;
+    color: #6a3a2e;
+  }
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--color-primary);
+    border: none;
+    color: white;
+    font-weight: 700;
+    font-size: 1.4rem;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    user-select: none;
+    line-height: 1;
+    transition: background-color 0.3s ease;
+  }
+  .modal-close:hover {
+    background: var(--color-primary-dark);
+  }
+  body.dark .modal-close {
+    background: var(--color-primary-dark);
+  }
+  body.dark .modal-close:hover {
+    background: var(--color-primary);
+  }
+  .modal h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    font-size: 2rem;
+    color: var(--color-primary);
+  }
+  body.dark .modal h2 {
+    color: var(--color-primary-dark);
+  }
+  .modal-section {
+    margin-bottom: 1.8rem;
+  }
+  .modal-section h3 {
+    font-weight: 600;
+    margin-bottom: 0.7rem;
+    border-bottom: 2px solid var(--color-accent);
+    padding-bottom: 0.2rem;
+    color: var(--color-primary);
+  }
+  body.dark .modal-section h3 {
+    border-color: var(--color-accent-dark);
+    color: var(--color-primary-dark);
+  }
+  .modal-section ul {
+    list-style: disc inside;
+    margin: 0;
+    padding-left: 1rem;
+    color: #713c2e;
+  }
+  body.dark .modal-section ul {
+    color: #a75c52;
+  }
+  .modal-section p {
+    color: #713c2e;
+    line-height: 1.5;
+    margin: 0;
+  }
+  body.dark .modal-section p {
+    color: #a75c52;
+  }
+  @media (max-width: 600px) {
+    main {
+      padding: 1rem;
+    }
+    .modal {
+      padding: 1.5rem 1.75rem;
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  World Recipes
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark themes">Dark Mode</button>
+</header>
+<main>
+  <div class="search-container" role="search" aria-label="Search recipes">
+    <input type="search" id="searchInput" placeholder="Search recipes by name or country…" aria-label="Search recipes" autocomplete="off" spellcheck="false" />
+    <select id="countryFilter" aria-label="Filter recipes by country">
+      <option value="all">All countries</option>
+    </select>
+  </div>
+  <div class="ads-container" aria-label="Google Adsense ad placeholder">
+    <!-- Paste your Google AdSense code here after your account is activated -->
+    Your Google AdSense Ad Code Goes Here
+  </div>
+  <div class="recipes-grid" id="recipesGrid" aria-live="polite" aria-atomic="false"></div>
+  <div class="pagination" id="pagination" aria-label="Pagination controls"></div>
+</main>
+
+<div class="modal-bg" id="modalBg" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal" id="modal" tabindex="0">
+    <button class="modal-close" id="modalCloseBtn" aria-label="Close recipe details">&times;</button>
+    <h2 id="modalTitle"></h2>
+    <div class="modal-section">
+      <h3>Country of Origin</h3>
+      <p id="modalCountry"></p>
+    </div>
+    <div class="modal-section">
+      <h3>Ingredients</h3>
+      <ul id="modalIngredients"></ul>
+    </div>
+    <div class="modal-section">
+      <h3>Instructions</h3>
+      <p id="modalInstructions"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const themeToggleBtn = document.getElementById('themeToggle');
+  const body = document.body;
+  themeToggleBtn.addEventListener('click', () => {
+    const isDark = body.classList.toggle('dark');
+    themeToggleBtn.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+  });
+
+  // Diverse recipes: 30 unique
+  const recipes = [
+    {
+      id: 1,
+      name: "Spaghetti Carbonara",
+      country: "Italy",
+      description: "Classic Roman pasta dish with eggs, cheese, pancetta, and black pepper.",
+      ingredients: [
+        "200g spaghetti",
+        "100g pancetta or guanciale",
+        "2 large eggs",
+        "50g Pecorino Romano cheese, grated",
+        "Freshly ground black pepper",
+        "Salt for pasta water"
+      ],
+      instructions: "Cook spaghetti until al dente. Fry pancetta until crisp. Beat eggs with cheese and pepper. Drain pasta reserving some water, combine quickly off heat. Add pasta water if needed for creaminess. Serve immediately."
+    },
+    {
+      id: 2,
+      name: "Chicken Tikka Masala",
+      country: "India",
+      description: "Tender chicken chunks in creamy spiced tomato sauce.",
+      ingredients: [
+        "500g chicken breast, cubed",
+        "150g plain yogurt",
+        "2 tbsp tikka masala spice mix",
+        "200ml tomato puree",
+        "100ml cream",
+        "1 chopped onion",
+        "2 minced garlic cloves",
+        "1 tsp grated ginger",
+        "Salt, oil"
+      ],
+      instructions: "Marinate chicken in yogurt and spices for at least 1 hour. Sauté onion, garlic, and ginger until golden. Add tomato puree and simmer. Add chicken and cook until done. Stir in cream and simmer 5 minutes. Serve with rice or naan."
+    },
+    {
+      id: 3,
+      name: "Sushi Rolls (California Roll)",
+      country: "Japan",
+      description: "Rice and nori rolls with crab, avocado, cucumber.",
+      ingredients: [
+        "2 cups sushi rice",
+        "4 nori sheets",
+        "100g crab meat",
+        "1 ripe avocado, sliced",
+        "1/2 cucumber, julienned",
+        "Soy sauce, wasabi"
+      ],
+      instructions: "Cook and season sushi rice. Place nori on mat, spread rice, add fillings, roll tightly. Slice and serve with soy sauce and wasabi."
+    },
+    {
+      id: 4,
+      name: "Beef Bourguignon",
+      country: "France",
+      description: "Slow-braised beef stew with red wine, mushrooms, and bacon.",
+      ingredients: [
+        "1 kg beef chuck, cubed",
+        "150g bacon lardons",
+        "2 cups red wine",
+        "2 cups beef broth",
+        "1 onion, chopped",
+        "2 carrots, sliced",
+        "200g mushrooms, sliced",
+        "2 garlic cloves, minced",
+        "Bay leaf, thyme, salt, pepper"
+      ],
+      instructions: "Brown beef and bacon. Sauté onion, garlic, carrots; add wine, bring to simmer. Return beef/bacon, add broth & herbs; simmer covered 2-3 hours. Add mushrooms near end. Season and serve."
+    },
+    {
+      id: 5,
+      name: "Pad Thai",
+      country: "Thailand",
+      description: "Stir-fried rice noodles with shrimp, tofu, peanuts, and tamarind sauce.",
+      ingredients: [
+        "200g rice noodles",
+        "150g shrimp peeled",
+        "100g tofu cubed",
+        "2 eggs",
+        "3 tbsp tamarind paste",
+        "2 tbsp fish sauce",
+        "2 tbsp sugar",
+        "1 lime",
+        "Crushed peanuts, spring onions, bean sprouts"
+      ],
+      instructions: "Soak noodles until soft. Stir fry tofu and shrimp. Push aside, scramble eggs, add noodles and sauce. Toss well. Garnish with peanuts and lime."
+    },
+    {
+      id: 6,
+      name: "Shakshuka",
+      country: "Middle East",
+      description: "Poached eggs in spicy tomato pepper sauce.",
+      ingredients: [
+        "4 eggs",
+        "400g canned tomatoes",
+        "1 onion, chopped",
+        "1 red bell pepper, chopped",
+        "1 tsp paprika",
+        "1 tsp cumin",
+        "Salt, pepper",
+        "Olive oil",
+        "Fresh parsley"
+      ],
+      instructions: "Sauté onion and peppers in oil. Add garlic and spices. Add tomatoes and simmer. Crack eggs, cook to desired doneness. Garnish with parsley."
+    },
+    {
+      id: 7,
+      name: "Tacos al Pastor",
+      country: "Mexico",
+      description: "Marinated pork tacos with pineapple and fresh salsa.",
+      ingredients: [
+        "500g pork shoulder, thinly sliced",
+        "2 tbsp achiote paste",
+        "1/4 cup pineapple juice",
+        "1 onion, chopped",
+        "Corn tortillas",
+        "Fresh pineapple, chopped",
+        "Cilantro, lime"
+      ],
+      instructions: "Marinate pork overnight. Grill and slice. Serve on tortillas with pineapple, onion, cilantro, and lime."
+    },
+    {
+      id: 8,
+      name: "Moussaka",
+      country: "Greece",
+      description: "Layered eggplant with minced meat and béchamel sauce.",
+      ingredients: [
+        "2 large eggplants, sliced",
+        "500g minced lamb",
+        "1 onion, chopped",
+        "400g canned tomatoes",
+        "Béchamel sauce (butter, flour, milk, nutmeg)",
+        "Olive oil, salt, pepper"
+      ],
+      instructions: "Grill eggplants. Cook meat with tomato and onion. Layer and top with béchamel. Bake until golden."
+    },
+    {
+      id: 9,
+      name: "Kimchi Fried Rice",
+      country: "Korea",
+      description: "Spicy fried rice with kimchi and vegetables.",
+      ingredients: [
+        "2 cups cooked rice",
+        "1 cup kimchi, chopped",
+        "1/2 onion, chopped",
+        "2 scallions, chopped",
+        "2 eggs",
+        "2 tbsp sesame oil",
+        "Soy sauce, salt, pepper"
+      ],
+      instructions: "Heat sesame oil, stir-fry onion and kimchi. Add rice and soy sauce, stir-fry. Push aside, scramble eggs and combine. Garnish with scallions."
+    },
+    {
+      id: 10,
+      name: "French Crepes",
+      country: "France",
+      description: "Thin, delicate pancakes for sweet or savory fillings.",
+      ingredients: [
+        "1 cup flour",
+        "2 eggs",
+        "1 1/4 cups milk",
+        "2 tbsp melted butter",
+        "Pinch of salt",
+        "Sugar for sweet crepes (optional)"
+      ],
+      instructions: "Mix ingredients to batter. Pour thin layers on pan. Cook and flip. Serve with desired fillings."
+    },
+    {
+      id: 11,
+      name: "Paella Valenciana",
+      country: "Spain",
+      description: "Saffron-infused rice with chicken, rabbit, and fresh vegetables.",
+      ingredients: [
+        "Bomba rice",
+        "Chicken pieces",
+        "Rabbit pieces (optional)",
+        "Green beans, tomatoes",
+        "Saffron, paprika",
+        "Olive oil, garlic"
+      ],
+      instructions: "Brown meats. Sauté vegetables. Add rice and broth with saffron. Cook uncovered until rice absorbs liquid."
+    },
+    {
+      id: 12,
+      name: "Falafel",
+      country: "Middle East",
+      description: "Crunchy chickpea balls served with tahini sauce or pita bread.",
+      ingredients: [
+        "Chickpeas",
+        "Onion",
+        "Parsley, cilantro",
+        "Cumin, coriander",
+        "Garlic",
+        "Flour",
+        "Oil for frying"
+      ],
+      instructions: "Soak and grind chickpeas with herbs and spices. Form balls and deep-fry until golden brown."
+    },
+    {
+      id: 13,
+      name: "Peking Duck",
+      country: "China",
+      description: "Crispy-skinned roast duck served with pancakes and hoisin sauce.",
+      ingredients: [
+        "Whole duck",
+        "Honey",
+        "Five-spice powder",
+        "Hoisin sauce",
+        "Scallions",
+        "Cucumber"
+      ],
+      instructions: "Dry duck skin and roast until crispy. Slice and serve with pancakes, hoisin sauce, scallions, and cucumber."
+    },
+    {
+      id: 14,
+      name: "Coq au Vin",
+      country: "France",
+      description: "Chicken slow cooked in red wine with mushrooms and bacon.",
+      ingredients: [
+        "Chicken pieces",
+        "Red wine",
+        "Mushrooms",
+        "Bacon",
+        "Onion, garlic",
+        "Thyme, bay leaf"
+      ],
+      instructions: "Brown chicken and bacon. Cook vegetables. Add wine and herbs. Simmer slowly until tender."
+    },
+    {
+      id: 15,
+      name: "Biryani",
+      country: "India",
+      description: "Spiced layered rice with meat and fragrant herbs.",
+      ingredients: [
+        "Basmati rice",
+        "Chicken or lamb",
+        "Yogurt",
+        "Onion, garlic, ginger",
+        "Spices: cinnamon, cardamom, saffron"
+      ],
+      instructions: "Cook marinated meat partly. Layer with partially cooked rice and spices. Seal and steam until done."
+    },
+    {
+      id: 16,
+      name: "Baklava",
+      country: "Turkey",
+      description: "Layers of filo pastry with nuts and honey syrup.",
+      ingredients: [
+        "Filo dough",
+        "Walnuts, pistachios",
+        "Butter",
+        "Honey syrup"
+      ],
+      instructions: "Layer filo with nuts and butter. Bake crisp and pour syrup when cooled."
+    },
+    {
+      id: 17,
+      name: "Goulash",
+      country: "Hungary",
+      description: "Hearty beef stew with paprika and root vegetables.",
+      ingredients: [
+        "Beef chuck",
+        "Paprika",
+        "Onion, garlic",
+        "Carrots, potatoes",
+        "Tomatoes"
+      ],
+      instructions: "Brown beef and onion. Add paprika and vegetables. Simmer slowly until tender."
+    },
+    {
+      id: 18,
+      name: "Ceviche",
+      country: "Peru",
+      description: "Fresh fish marinated in citrus with onions and chili.",
+      ingredients: [
+        "White fish fillets",
+        "Lime juice",
+        "Red onion",
+        "Chili peppers",
+        "Cilantro"
+      ],
+      instructions: "Marinate fish in lime juice until opaque, mix with onion, chili and cilantro. Serve chilled."
+    },
+    {
+      id: 19,
+      name: "Empanadas",
+      country: "Argentina",
+      description: "Savory stuffed pastries with meat or cheese filling.",
+      ingredients: [
+        "Pastry dough",
+        "Ground beef",
+        "Onion",
+        "Olives",
+        "Spices"
+      ],
+      instructions: "Prepare filling, fill dough rounds, seal and bake or fry."
+    },
+    {
+      id: 20,
+      name: "Chiles en Nogada",
+      country: "Mexico",
+      description: "Poblano peppers stuffed with picadillo and topped with walnut sauce.",
+      ingredients: [
+        "Poblano peppers",
+        "Picadillo (minced meat with fruit and nuts)",
+        "Walnut cream sauce",
+        "Pomegranate seeds",
+        "Parsley"
+      ],
+      instructions: "Stuff roasted peppers with picadillo. Pour walnut sauce and garnish."
+    },
+    {
+      id: 21,
+      name: "Ratatouille",
+      country: "France",
+      description: "Vegetable stew with eggplants, zucchinis, peppers, and tomatoes.",
+      ingredients: [
+        "Eggplants",
+        "Zucchini",
+        "Bell peppers",
+        "Tomatoes",
+        "Onion, garlic",
+        "Herbs de Provence"
+      ],
+      instructions: "Cook vegetables separately, layer in dish and bake until tender."
+    },
+    {
+      id: 22,
+      name: "Pho",
+      country: "Vietnam",
+      description: "Aromatic noodle soup with beef or chicken and herbs.",
+      ingredients: [
+        "Beef bones or chicken carcass",
+        "Rice noodles",
+        "Star anise, cinnamon",
+        "Ginger, onion",
+        "Fresh herbs",
+        "Lime, chili"
+      ],
+      instructions: "Simmer bones with spices for broth. Serve over noodles with meat and herbs."
+    },
+    {
+      id: 23,
+      name: "Mole Poblano",
+      country: "Mexico",
+      description: "Rich chocolate and chili sauce served over chicken.",
+      ingredients: [
+        "Dried chili peppers",
+        "Chocolate",
+        "Spices",
+        "Chicken",
+        "Nuts"
+      ],
+      instructions: "Grind chilies and spices, mix with chocolate and nuts. Simmer sauce and serve over chicken."
+    },
+    {
+      id: 24,
+      name: "Bibimbap",
+      country: "Korea",
+      description: "Rice bowl with sautéed vegetables, meat, egg, and chili paste.",
+      ingredients: [
+        "Cooked rice",
+        "Spinach, bean sprouts, carrots",
+        "Beef or tofu",
+        "Egg",
+        "Gochujang (chili paste)"
+      ],
+      instructions: "Arrange veggies and meat on rice, top with fried egg and chili paste. Mix before eating."
+    },
+    {
+      id: 25,
+      name: "Pavlova",
+      country: "New Zealand/Australia",
+      description: "Meringue dessert topped with whipped cream and fresh fruit.",
+      ingredients: [
+        "Egg whites",
+        "Sugar",
+        "Cornstarch",
+        "Vinegar",
+        "Whipped cream",
+        "Seasonal fruits"
+      ],
+      instructions: "Whisk egg whites and sugar to stiff peaks. Bake meringue, cool, top with cream and fruits."
+    },
+    {
+      id: 26,
+      name: "Borscht",
+      country: "Ukraine",
+      description: "Beetroot soup often served with sour cream.",
+      ingredients: [
+        "Beets",
+        "Cabbage",
+        "Carrots",
+        "Potatoes",
+        "Onion, garlic",
+        "Beef or vegetable broth"
+      ],
+      instructions: "Cook vegetables in broth. Blend partially for texture. Serve with sour cream."
+    },
+    {
+      id: 27,
+      name: "Chow Mein",
+      country: "China",
+      description: "Stir-fried noodles with vegetables and meat or tofu.",
+      ingredients: [
+        "Egg noodles",
+        "Cabbage, carrots, sprouts",
+        "Chicken or beef",
+        "Soy sauce",
+        "Garlic, ginger"
+      ],
+      instructions: "Cook noodles. Stir-fry meat and veggies. Toss with noodles and soy sauce."
+    },
+    {
+      id: 28,
+      name: "Gnocchi al Pomodoro",
+      country: "Italy",
+      description: "Soft potato dumplings in a fresh tomato sauce.",
+      ingredients: [
+        "Potato gnocchi",
+        "Tomato sauce",
+        "Basil",
+        "Garlic",
+        "Parmesan cheese"
+      ],
+      instructions: "Boil gnocchi. Heat tomato sauce with garlic and basil. Toss gnocchi in sauce, sprinkle cheese."
+    },
+    {
+      id: 29,
+      name: "Falafel Wrap",
+      country: "Middle East",
+      description: "Crispy chickpea balls with salad and tahini in flatbread.",
+      ingredients: [
+        "Falafel balls",
+        "Flatbread or pita",
+        "Lettuce, tomatoes, cucumber",
+        "Tahini sauce"
+      ],
+      instructions: "Warm flatbread. Fill with falafel and salad. Drizzle tahini and roll."
+    },
+    {
+      id: 30,
+      name: "Shrimp and Grits",
+      country: "USA",
+      description: "Creamy grits topped with spicy sautéed shrimp and bacon.",
+      ingredients: [
+        "Grits",
+        "Shrimp",
+        "Bacon",
+        "Garlic",
+        "Cheese",
+        "Hot sauce"
+      ],
+      instructions: "Cook cheese grits. Cook shrimp and bacon with seasoning. Serve shrimp over grits."
+    }
+  ];
+
+  const recipesGrid = document.getElementById('recipesGrid');
+  const searchInput = document.getElementById('searchInput');
+  const countryFilter = document.getElementById('countryFilter');
+  const pagination = document.getElementById('pagination');
+  const modalBg = document.getElementById('modalBg');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalCountry = document.getElementById('modalCountry');
+  const modalIngredients = document.getElementById('modalIngredients');
+  const modalInstructions = document.getElementById('modalInstructions');
+
+  let currentPage = 1;
+  const RECIPES_PER_PAGE = 12;
+  let filteredRecipes = recipes;
+
+  const countriesSet = new Set(recipes.map(r => r.country));
+  const countries = Array.from(countriesSet).sort();
+
+  function initCountryFilter() {
+    countries.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = c;
+      countryFilter.appendChild(opt);
+    });
+  }
+
+  function filterRecipes() {
+    const query = searchInput.value.trim().toLowerCase();
+    const countryVal = countryFilter.value;
+    filteredRecipes = recipes.filter(r => {
+      const nameMatch = r.name.toLowerCase().includes(query);
+      const countryMatch = countryVal === 'all' || r.country === countryVal;
+      return nameMatch && countryMatch;
+    });
+    currentPage = 1;
+    renderRecipes();
+    renderPagination();
+  }
+
+  function renderRecipes() {
+    recipesGrid.innerHTML = "";
+    if (filteredRecipes.length === 0) {
+      recipesGrid.textContent = "No recipes found.";
+      return;
+    }
+    const startIdx = (currentPage - 1) * RECIPES_PER_PAGE;
+    const pageRecipes = filteredRecipes.slice(startIdx, startIdx + RECIPES_PER_PAGE);
+    pageRecipes.forEach(r => {
+      const card = document.createElement('article');
+      card.className = 'recipe-card';
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-pressed', 'false');
+      card.setAttribute('aria-label', `Open recipe for ${r.name}`);
+      card.dataset.id = r.id;
+
+      const content = document.createElement('div');
+      content.className = 'recipe-content';
+
+      const title = document.createElement('h3');
+      title.className = 'recipe-title';
+      title.textContent = r.name;
+      content.appendChild(title);
+
+      const country = document.createElement('div');
+      country.className = 'recipe-country';
+      country.textContent = r.country;
+      content.appendChild(country);
+
+      const desc = document.createElement('p');
+      desc.className = 'recipe-desc';
+      desc.textContent = r.description;
+      content.appendChild(desc);
+
+      card.appendChild(content);
+
+      card.addEventListener('click', () => openRecipeModal(r));
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openRecipeModal(r);
+        }
+      });
+
+      recipesGrid.appendChild(card);
+    });
+  }
+
+  function renderPagination() {
+    pagination.innerHTML = "";
+    const totalPages = Math.ceil(filteredRecipes.length / RECIPES_PER_PAGE);
+    if (totalPages <= 1) return;
+
+    const btnPrev = document.createElement('button');
+    btnPrev.textContent = 'Prev';
+    btnPrev.disabled = currentPage === 1;
+    btnPrev.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderRecipes();
+        renderPagination();
+        scrollToTop();
+      }
+    });
+    pagination.appendChild(btnPrev);
+
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement('button');
+      btn.textContent = i;
+      btn.disabled = i === currentPage;
+      btn.setAttribute('aria-current', i === currentPage ? 'page' : 'false');
+      btn.addEventListener('click', () => {
+        currentPage = i;
+        renderRecipes();
+        renderPagination();
+        scrollToTop();
+      });
+      pagination.appendChild(btn);
+    }
+
+    const btnNext = document.createElement('button');
+    btnNext.textContent = 'Next';
+    btnNext.disabled = currentPage === totalPages;
+    btnNext.addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderRecipes();
+        renderPagination();
+        scrollToTop();
+      }
+    });
+    pagination.appendChild(btnNext);
+  }
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function openRecipeModal(recipe) {
+    modalTitle.textContent = recipe.name;
+    modalCountry.textContent = recipe.country;
+    modalIngredients.innerHTML = '';
+    recipe.ingredients.forEach(ing => {
+      const li = document.createElement('li');
+      li.textContent = ing;
+      modalIngredients.appendChild(li);
+    });
+    modalInstructions.textContent = recipe.instructions;
+    modalBg.classList.add('active');
+    modalCloseBtn.focus();
+  }
+
+  function closeRecipeModal() {
+    modalBg.classList.remove('active');
+  }
+
+  modalCloseBtn.addEventListener('click', closeRecipeModal);
+  modalBg.addEventListener('click', e => {
+    if (e.target === modalBg) {
+      closeRecipeModal();
+    }
+  });
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modalBg.classList.contains('active')) {
+      closeRecipeModal();
+    }
+  });
+
+  searchInput.addEventListener('input', filterRecipes);
+  countryFilter.addEventListener('change', filterRecipes);
+
+  initCountryFilter();
+  filterRecipes();
+})();
+</script>
+</body>
+</html>
